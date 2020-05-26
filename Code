@@ -1,0 +1,25 @@
+import tweepy
+
+# Variables that contains the credentials to access Twitter API
+ACCESS_TOKEN = "1252987413602992129-MrA6VpLH4vD3Cxrwpf4TuKCiqYn9c2"
+ACCESS_TOKEN_SECRET = "tXOzsaHfcT7eaf8xs7OWvsXivJ4fXCYmUXZn1VCA2Mzag"
+CONSUMER_KEY = "r0vdTGH0s46BV3LU6bdV1rYFu"
+CONSUMER_SECRET = "yYa7aQqhEDMy0GJr0zW2AhJuVC4XUclbuZynoZFOvTQl10Ugr0"
+
+# Setup access to API
+def connect_to_twitter_OAuth():
+    auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
+    auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
+
+    api = tweepy.API(auth)
+    return api
+
+
+# Create API object
+api = connect_to_twitter_OAuth()
+
+# Search and return all the Greek tweets for the Greek bank "eurobank" and some information about those tweets
+for tweet in tweepy.Cursor(api.search, q="eurobank", include_entities=True, since ="2020-05-25", 
+                           until = "2020-05-26", lang ="el").items():
+    print (tweet.created_at, tweet.author._json['screen_name'], tweet.id, tweet.text, 
+           api.retweets(tweet.id))
